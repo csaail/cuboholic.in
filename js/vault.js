@@ -1,14 +1,14 @@
 import { VAULT_CONFIG } from './vault-config.js';
 
-const API = 'https://api.github.com';
-const { owner, repo, branch, uploadPath } = VAULT_CONFIG;
+const { clientId, scope, folderName } = VAULT_CONFIG;
+const DRIVE_API = 'https://www.googleapis.com/drive/v3';
+const UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
 
 // ===== DOM =====
 const loginPanel = document.getElementById('loginPanel');
 const vaultPanel = document.getElementById('vaultPanel');
-const loginForm = document.getElementById('loginForm');
+const googleSignInBtn = document.getElementById('googleSignInBtn');
 const loginError = document.getElementById('loginError');
-const tokenInput = document.getElementById('tokenInput');
 const userInfo = document.getElementById('userEmail');
 const logoutBtn = document.getElementById('logoutBtn');
 const uploadZone = document.getElementById('uploadZone');
@@ -18,30 +18,49 @@ const progressLabel = document.getElementById('progressLabel');
 const progressFill = document.getElementById('progressFill');
 const fileList = document.getElementById('fileList');
 
-// ===== AUTH (GitHub PAT stored in localStorage) =====
-let token = localStorage.getItem('vault_token');
+// ===== STATE =====
+let accessToken = null;
+let folderId = null;
+let tokenClient = null;
 
-async function verifyToken(t) {
-  const res = await fetch(`${API}/user`, {
-    headers: { Authorization: `token ${t}` }
+// ===== AUTH =====
+function initTokenClient() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: scope,
+    callback: handleTokenResponse,
   });
-  if (!res.ok) return null;
-  return res.json();
 }
 
-async function init() {
-  if (token) {
-    const user = await verifyToken(token);
-    if (user) {
-      showVault(user);
-    } else {
-      localStorage.removeItem('vault_token');
-      token = null;
-      showLogin();
-    }
-  } else {
-    showLogin();
+function handleTokenResponse(response) {
+  if (response.error) {
+    loginError.textContent = `Auth error: ${response.error}`;
+    loginError.style.display = 'block';
+    return;
   }
+  accessToken = response.access_token;
+  loginError.style.display = 'none';
+  showVault();
+}
+
+async function showVault() {
+  loginPanel.style.display = 'none';
+  vaultPanel.classList.add('active');
+
+  // Get user info
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const user = await res.json();
+    userInfo.textContent = `Signed in as ${user.email}`;
+  } catch {
+    userInfo.textContent = 'Signed in';
+  }
+
+  // Find or create vault folder
+  folderId = await getOrCreateFolder();
+  loadFiles();
 }
 
 function showLogin() {
@@ -49,43 +68,54 @@ function showLogin() {
   vaultPanel.classList.remove('active');
 }
 
-function showVault(user) {
-  loginPanel.style.display = 'none';
-  vaultPanel.classList.add('active');
-  userInfo.textContent = `Signed in as ${user.login}`;
-  loadFiles();
-}
-
-// ===== LOGIN =====
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  loginError.style.display = 'none';
-  const t = tokenInput.value.trim();
-
-  if (!t) return;
-
-  try {
-    const user = await verifyToken(t);
-    if (user) {
-      token = t;
-      localStorage.setItem('vault_token', t);
-      showVault(user);
-    } else {
-      loginError.textContent = 'Invalid token. Check permissions.';
-      loginError.style.display = 'block';
-    }
-  } catch (err) {
-    loginError.textContent = `Error: ${err.message}`;
+// ===== GOOGLE SIGN IN =====
+googleSignInBtn.addEventListener('click', () => {
+  if (!tokenClient) {
+    loginError.textContent = 'Google API still loading. Try again in a moment.';
     loginError.style.display = 'block';
+    return;
   }
+  tokenClient.requestAccessToken();
 });
 
 // ===== LOGOUT =====
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('vault_token');
-  token = null;
+  if (accessToken) {
+    google.accounts.oauth2.revoke(accessToken);
+  }
+  accessToken = null;
+  folderId = null;
   showLogin();
 });
+
+// ===== FOLDER =====
+async function getOrCreateFolder() {
+  // Search for existing folder
+  const q = `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+  const res = await fetch(`${DRIVE_API}/files?q=${encodeURIComponent(q)}&fields=files(id,name)`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const data = await res.json();
+
+  if (data.files && data.files.length > 0) {
+    return data.files[0].id;
+  }
+
+  // Create folder
+  const createRes = await fetch(`${DRIVE_API}/files`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: folderName,
+      mimeType: 'application/vnd.google-apps.folder',
+    }),
+  });
+  const folder = await createRes.json();
+  return folder.id;
+}
 
 // ===== UPLOAD =====
 uploadZone.addEventListener('click', () => fileInput.click());
@@ -117,39 +147,48 @@ function handleFiles(files) {
 }
 
 async function uploadFile(file) {
-  const timestamp = Date.now();
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const fileName = `${timestamp}_${safeName}`;
-  const path = `${uploadPath}/${fileName}`;
-
   uploadProgress.classList.add('active');
   progressLabel.textContent = `Uploading: ${file.name}`;
-  progressFill.style.width = '30%';
+  progressFill.style.width = '20%';
 
   try {
-    // Read file as base64
-    const base64 = await fileToBase64(file);
+    // Multipart upload: metadata + file content
+    const metadata = {
+      name: file.name,
+      parents: [folderId],
+    };
 
-    progressFill.style.width = '60%';
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+    form.append('file', file);
 
-    // Upload via GitHub API
-    const res = await fetch(`${API}/repos/${owner}/${repo}/contents/${path}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: `vault: upload ${safeName}`,
-        content: base64,
-        branch: branch,
-      }),
+    progressFill.style.width = '50%';
+
+    const res = await fetch(`${UPLOAD_API}/files?uploadType=multipart&fields=id,name,webViewLink,webContentLink`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
+      body: form,
     });
 
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.message || 'Upload failed');
+      throw new Error(err.error?.message || 'Upload failed');
     }
+
+    const uploaded = await res.json();
+
+    // Make file accessible via link
+    await fetch(`${DRIVE_API}/files/${uploaded.id}/permissions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        role: 'reader',
+        type: 'anyone',
+      }),
+    });
 
     progressFill.style.width = '100%';
     progressLabel.textContent = `Uploaded: ${file.name}`;
@@ -169,56 +208,41 @@ async function uploadFile(file) {
   }
 }
 
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      // Remove the data:...;base64, prefix
-      const base64 = reader.result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
 // ===== LOAD FILES =====
 async function loadFiles() {
   try {
-    const res = await fetch(`${API}/repos/${owner}/${repo}/contents/${uploadPath}?ref=${branch}`, {
-      headers: { Authorization: `token ${token}` }
-    });
-
-    if (res.status === 404) {
+    if (!folderId) {
       fileList.innerHTML = '<p class="file-list-empty">No files uploaded yet.</p>';
       return;
     }
+
+    const q = `'${folderId}' in parents and trashed=false`;
+    const res = await fetch(
+      `${DRIVE_API}/files?q=${encodeURIComponent(q)}&fields=files(id,name,webViewLink,webContentLink,createdTime)&orderBy=createdTime desc&pageSize=100`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
 
     if (!res.ok) throw new Error('Failed to load files');
 
-    const files = await res.json();
+    const data = await res.json();
+    const files = data.files || [];
 
-    if (!Array.isArray(files) || files.length === 0) {
+    if (files.length === 0) {
       fileList.innerHTML = '<p class="file-list-empty">No files uploaded yet.</p>';
       return;
     }
 
-    // Sort newest first
-    const sorted = files.sort((a, b) => b.name.localeCompare(a.name));
-
     fileList.innerHTML = '';
 
-    for (const file of sorted) {
-      const displayName = file.name.replace(/^\d+_/, '');
-      // Raw URL for sharing
-      const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${uploadPath}/${file.name}`;
+    for (const file of files) {
+      const shareLink = `https://drive.google.com/uc?id=${file.id}&export=download`;
 
       const item = document.createElement('div');
       item.className = 'file-item';
       item.innerHTML = `
-        <span class="file-name" title="${displayName}">${displayName}</span>
-        <button class="btn-copy" data-url="${rawUrl}">Copy Link</button>
-        <button class="btn-delete" data-path="${file.path}" data-sha="${file.sha}">Delete</button>
+        <span class="file-name" title="${file.name}">${file.name}</span>
+        <button class="btn-copy" data-url="${shareLink}">Copy Link</button>
+        <button class="btn-delete" data-id="${file.id}">Delete</button>
       `;
       fileList.appendChild(item);
     }
@@ -250,19 +274,11 @@ async function loadFiles() {
       btn.addEventListener('click', async () => {
         if (!confirm('Delete this file?')) return;
         try {
-          const res = await fetch(`${API}/repos/${owner}/${repo}/contents/${btn.dataset.path}`, {
+          const res = await fetch(`${DRIVE_API}/files/${btn.dataset.id}`, {
             method: 'DELETE',
-            headers: {
-              Authorization: `token ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: `vault: delete file`,
-              sha: btn.dataset.sha,
-              branch: branch,
-            }),
+            headers: { Authorization: `Bearer ${accessToken}` },
           });
-          if (!res.ok) throw new Error('Delete failed');
+          if (!res.ok && res.status !== 204) throw new Error('Delete failed');
           loadFiles();
         } catch (err) {
           alert('Error: ' + err.message);
@@ -276,4 +292,13 @@ async function loadFiles() {
 }
 
 // ===== INIT =====
-init();
+function waitForGoogleApi() {
+  if (typeof google !== 'undefined' && google.accounts) {
+    initTokenClient();
+  } else {
+    setTimeout(waitForGoogleApi, 100);
+  }
+}
+
+showLogin();
+waitForGoogleApi();

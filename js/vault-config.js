@@ -1,8 +1,6 @@
-// GitHub Vault Configuration
-// Fill in your GitHub username and repo name
+// Google Drive Vault Configuration
 export const VAULT_CONFIG = {
-  owner: 'csaail',   // e.g. 'saailchavan'
-  repo: 'cuboholic.in',
-  branch: 'main',
-  uploadPath: 'vault-files',       // folder in repo where files are stored
+  clientId: '625446478311-h8lgj1nvi6bs7c40p0rn8i8ugia7gr1r.apps.googleusercontent.com',
+  scope: 'https://www.googleapis.com/auth/drive.file',
+  folderName: 'CuboholicVault',
 };

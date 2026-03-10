@@ -12,11 +12,11 @@
 </head>
 <body class="vault-page">
   <div class="vault-container">
-    <a href="/" class="vault-back">← Back to portfolio</a>
+    <a href="/" class="vault-back">&larr; Back to portfolio</a>
 
     <div class="vault-header">
       <h1>Private Vault</h1>
-      <p>Upload files to your GitHub repo and get shareable links.</p>
+      <p>Upload files to Google Drive and get shareable links.</p>
     </div>
 
     <!-- Login -->
@@ -24,16 +24,10 @@
       <div class="login-box">
         <h2>Sign In</h2>
         <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">
-          Enter your GitHub Personal Access Token to access the vault.
+          Sign in with your Google account to access the vault.
         </p>
-        <form id="loginForm">
-          <div class="form-field">
-            <label>GitHub Token</label>
-            <input type="password" id="tokenInput" required placeholder="ghp_xxxxxxxxxxxx">
-          </div>
-          <button type="submit" class="submit-btn">Sign In →</button>
-          <p class="login-error" id="loginError"></p>
-        </form>
+        <button type="button" class="submit-btn" id="googleSignInBtn">Sign in with Google &rarr;</button>
+        <p class="login-error" id="loginError"></p>
       </div>
     </div>
 
@@ -45,7 +39,7 @@
       </div>
 
       <div class="upload-zone" id="uploadZone">
-        <div class="upload-icon">📁</div>
+        <div class="upload-icon">&#128193;</div>
         <p>Drop files here or click to browse</p>
         <input type="file" class="upload-input" id="fileInput" multiple>
       </div>
@@ -66,6 +60,7 @@
     </div>
   </div>
 
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script type="module" src="js/vault.js"></script>
 </body>
 </html>
