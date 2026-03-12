@@ -468,10 +468,6 @@ body {
   transform: scale(1.05);
 }
 
-.gallery-item.hidden {
-  display: none;
-}
-
 /* ===== CONTACT ===== */
 .section-contact {
   border-top: 1px solid var(--border);
@@ -670,22 +666,8 @@ body {
   font-size: 20px;
   margin-bottom: 24px;
 }
-.login-box .form-field label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; display: block; }
-.login-box .form-field input {
-  width: 100%;
-  padding: 12px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 14px;
-  outline: none;
-  margin-bottom: 16px;
-}
-.login-box .form-field input:focus { border-color: var(--muted); }
-.login-box .submit-btn { width: 100%; text-align: center; }
 
-.login-error { color: #e05050; font-size: 13px; margin-top: 8px; display: none; }
+.login-error { color: #e05050; font-size: 13px; margin-top: 8px; }
 
 .vault-panel { display: none; }
 .vault-panel.active { display: block; }
