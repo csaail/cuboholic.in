@@ -1,60 +1,98 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-const items = [
-  { category: 'photo', label: 'Photo 1', bg: 'linear-gradient(135deg,#1a1a2e,#2a2a4e)', tall: true },
-  { category: 'illustration', label: 'Illustration 1', bg: 'linear-gradient(135deg,#2e1a1a,#4e2a2a)', tall: false },
-  { category: 'photo', label: 'Photo 2', bg: 'linear-gradient(135deg,#1a2e1a,#2a4e2a)', tall: false },
-  { category: 'illustration', label: 'Illustration 2', bg: 'linear-gradient(135deg,#2e2e1a,#4e4e2a)', tall: true },
-  { category: 'photo', label: 'Photo 3', bg: 'linear-gradient(135deg,#1a1a2e,#3a2a4e)', tall: false },
-  { category: 'illustration', label: 'Illustration 3', bg: 'linear-gradient(135deg,#2e1a2e,#4e2a4e)', tall: false },
-];
-
-const filters = [
-  { label: 'All', value: 'all' },
-  { label: 'Photography', value: 'photo' },
-  { label: 'Illustrations', value: 'illustration' },
-];
+const PEXELS_API_KEY = '1XtTdvJhUn5pJoiI3lEbrqlg0PQwgYTD9mVbNXpJEMJjArlrtYopoQ8Z';
+const COLLECTION_ID = '0xquq7j';
 
 export default function Gallery() {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const gridRef = useRef(null);
 
-  const filtered = activeFilter === 'all'
-    ? items
-    : items.filter((item) => item.category === activeFilter);
+  useEffect(() => {
+    async function fetchPhotos() {
+      try {
+        const res = await fetch(
+          `https://api.pexels.com/v1/collections/${COLLECTION_ID}?type=photos&per_page=80`,
+          { headers: { Authorization: PEXELS_API_KEY } }
+        );
+        const data = await res.json();
+        setPhotos(data.media || []);
+      } catch (err) {
+        console.error('Failed to fetch photos:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPhotos();
+  }, []);
+
+  useEffect(() => {
+    if (!gridRef.current || photos.length === 0) return;
+    const items = gridRef.current.querySelectorAll('.gallery-item');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    items.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [photos]);
 
   return (
     <section className="section" id="gallery">
       <div className="container">
         <div className="section-label reveal">03 — Gallery</div>
         <h2 className="editorial-heading reveal">
-          Photographs &amp;<br /><em>illustrations</em>
+          Photographs &amp;<br /><em>captured moments</em>
         </h2>
 
-        <div className="gallery-filters reveal">
-          {filters.map((f) => (
-            <button
-              key={f.value}
-              className={`filter-btn${activeFilter === f.value ? ' active' : ''}`}
-              onClick={() => setActiveFilter(f.value)}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="gallery-grid">
-          {filtered.map((item, i) => (
-            <div className="gallery-item reveal" key={i}>
+        {loading ? (
+          <div className="gallery-loading">Loading photos...</div>
+        ) : (
+          <div className="gallery-grid" ref={gridRef}>
+            {photos.map((photo, i) => (
               <div
-                className={`image-placeholder${item.tall ? ' tall' : ''}`}
-                style={{ background: item.bg }}
+                className="gallery-item"
+                key={photo.id}
+                style={{ transitionDelay: `${Math.min(i * 60, 600)}ms` }}
+                onClick={() => setSelectedPhoto(photo)}
               >
-                <span>{item.label}</span>
+                <img
+                  src={photo.src.large}
+                  alt={photo.alt || 'Photo by Saail Chavan'}
+                  loading="lazy"
+                />
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {selectedPhoto && (
+        <div className="lightbox" onClick={() => setSelectedPhoto(null)}>
+          <button
+            className="lightbox-close"
+            onClick={() => setSelectedPhoto(null)}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+          <img
+            src={selectedPhoto.src.large2x}
+            alt={selectedPhoto.alt || 'Photo by Saail Chavan'}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {selectedPhoto.alt && (
+            <p className="lightbox-caption">{selectedPhoto.alt.replace(/^Free stock photo of /i, '')}</p>
+          )}
+        </div>
+      )}
     </section>
   );
 }
