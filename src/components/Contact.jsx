@@ -12,7 +12,7 @@ export default function Contact() {
               Have a project in mind? I'd love to hear about it. Drop me a message and I'll get back to you soon.
             </p>
             <div className="contact-links reveal">
-              <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub ↗</a>
+              <a href="https://github.com/csaail" target="_blank" rel="noreferrer">GitHub ↗</a>
               <a href="https://linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
               <a href="https://instagram.com/" target="_blank" rel="noreferrer">Instagram ↗</a>
               <a href="https://twitter.com/" target="_blank" rel="noreferrer">Twitter ↗</a>
