@@ -1,14 +1,21 @@
 export default function Hero() {
   return (
     <section className="hero" id="hero">
-      <div className="hero-inner">
-        <p className="hero-label reveal">Portfolio — 2026</p>
-        <h1 className="hero-name reveal">
-          <span className="hero-line">Saail</span>
-          <span className="hero-line italic">Chavan</span>
-        </h1>
-        <p className="hero-tagline reveal">Developer · Photographer · Illustrator</p>
-        <div className="hero-scroll reveal">
+      <div className="hero-art reveal">
+        <img src="/hero.png" alt="Saail Chavan — developer, photographer, illustrator" />
+      </div>
+
+      <div className="hero-tagline-wrap reveal">
+        <p className="hero-tagline-main">
+          Code, cameras, and the occasional <em>Rubik's cube.</em>
+        </p>
+
+        <div className="hero-cta-row">
+          <a href="#projects" className="btn-pill btn-pill-dark">See my work</a>
+          <a href="#contact" className="btn-pill btn-pill-light">Say hi</a>
+        </div>
+
+        <div className="hero-scroll">
           <span>Scroll</span>
           <div className="scroll-line"></div>
         </div>

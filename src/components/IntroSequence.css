@@ -1,0 +1,284 @@
+/* ===== INTRO SEQUENCE ===== */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.intro-overlay.curtain-active {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Curtain halves */
+.intro-curtain-left,
+.intro-curtain-right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--bg);
+  z-index: 2;
+  will-change: transform;
+}
+
+.intro-curtain-left {
+  left: 0;
+}
+
+.intro-curtain-right {
+  right: 0;
+}
+
+.curtain-active .intro-curtain-left {
+  animation: curtain-left 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.curtain-active .intro-curtain-right {
+  animation: curtain-right 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes curtain-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes curtain-right {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+/* Scene container */
+.intro-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.intro-scene.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== SCENE 0: Opening ===== */
+
+.intro-line {
+  width: min(400px, 60vw);
+  height: 1px;
+  background: var(--muted);
+  transform: scaleX(0);
+  animation: line-draw 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes line-draw {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+.intro-greeting {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(24px, 4vw, 40px);
+  color: var(--accent);
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.8s ease 0.8s forwards;
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== SCENE 1: Messages ===== */
+
+.intro-message-wrapper {
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-message {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(16px, 2vw, 22px);
+  color: var(--accent);
+  max-width: 500px;
+  text-align: center;
+  line-height: 1.7;
+  padding: 0 24px;
+}
+
+.intro-message.entering {
+  animation: msg-enter 0.5s ease forwards;
+}
+
+.intro-message.exiting {
+  animation: msg-exit 0.4s ease forwards;
+}
+
+@keyframes msg-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes msg-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+}
+
+.intro-prompt {
+  position: absolute;
+  bottom: clamp(60px, 10vh, 100px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ===== SCENE 2: Name Reveal ===== */
+
+.intro-name-block {
+  text-align: center;
+}
+
+.intro-name-first,
+.intro-name-last {
+  font-family: var(--serif);
+  font-size: clamp(48px, 10vw, 140px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -2px;
+  display: block;
+  clip-path: inset(0 100% 0 0);
+}
+
+.intro-name-first.reveal-clip {
+  animation: clip-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.intro-name-last {
+  font-style: italic;
+}
+
+.intro-name-last.reveal-clip {
+  animation: clip-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
+}
+
+@keyframes clip-reveal {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+.intro-tagline {
+  font-size: clamp(13px, 1.4vw, 17px);
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-top: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.8s ease 1s forwards;
+}
+
+/* ===== SKIP BUTTON ===== */
+
+.intro-skip {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 1001;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: color 0.2s;
+}
+
+.intro-skip:hover {
+  color: var(--text);
+}
+
+/* ===== REDUCED MOTION ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-line,
+  .intro-greeting,
+  .intro-message,
+  .intro-name-first,
+  .intro-name-last,
+  .intro-tagline,
+  .intro-prompt {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .curtain-active .intro-curtain-left,
+  .curtain-active .intro-curtain-right {
+    animation-duration: 0.3s !important;
+  }
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 480px) {
+  .intro-skip {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .intro-prompt {
+    bottom: 50px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+}

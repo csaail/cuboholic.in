@@ -27,6 +27,7 @@ export default function Navbar() {
         <a href="#about" onClick={(e) => handleLinkClick(e, '#about')}>About</a>
         <a href="#projects" onClick={(e) => handleLinkClick(e, '#projects')}>Projects</a>
         <a href="#gallery" onClick={(e) => handleLinkClick(e, '#gallery')}>Gallery</a>
+        <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
         <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>Contact</a>
       </div>
       <button

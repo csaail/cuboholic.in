@@ -3,11 +3,11 @@ export default function About() {
     <section className="section" id="about">
       <div className="container">
         <div className="section-label reveal">01 — About</div>
+        <h2 className="editorial-heading reveal">
+          Building digital<br /><em>experiences</em> that matter.
+        </h2>
         <div className="about-grid">
           <div className="about-text">
-            <h2 className="editorial-heading reveal">
-              Building digital<br /><em>experiences</em> that matter.
-            </h2>
             <p className="body-text reveal">
               I'm a developer who loves crafting things for the web. When I'm not writing code, you'll find me capturing moments through my camera or creating digital illustrations.
             </p>
@@ -30,8 +30,14 @@ export default function About() {
             </div>
           </div>
           <div className="about-image reveal">
-            <div className="image-placeholder">
-              <span>YOUR PHOTO</span>
+            <img
+              src="/me.png"
+              alt="Saail Chavan"
+              className="about-photo"
+              onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex'; }}
+            />
+            <div className="image-placeholder" style={{ display: 'none' }}>
+              <span>ADD /public/me.png</span>
             </div>
           </div>
         </div>

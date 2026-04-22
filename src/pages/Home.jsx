@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function Home() {
-  useScrollReveal();
+  useScrollReveal(true);
 
   return (
     <>
