@@ -24,9 +24,7 @@ export default function Navbar() {
     <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
       <Link to="/" className="nav-logo">cuboholic</Link>
       <div className={`nav-links${menuOpen ? ' open' : ''}`}>
-        <a href="#about" onClick={(e) => handleLinkClick(e, '#about')}>About</a>
-        <a href="#projects" onClick={(e) => handleLinkClick(e, '#projects')}>Projects</a>
-        <a href="#gallery" onClick={(e) => handleLinkClick(e, '#gallery')}>Gallery</a>
+        <Link to="/career" onClick={() => setMenuOpen(false)}>Career</Link>
         <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
         <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>Contact</a>
       </div>

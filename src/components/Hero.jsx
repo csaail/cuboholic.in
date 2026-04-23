@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       <div className="hero-art reveal">
-        <img src="/hero.png" alt="Saail Chavan — developer, photographer, illustrator" />
+        <img src="/hero.webp" alt="Saail Chavan — developer, photographer, illustrator" />
       </div>
 
       <div className="hero-tagline-wrap reveal">

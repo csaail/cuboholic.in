@@ -4,6 +4,7 @@ import About from '../components/About';
 import SkillsMarquee from '../components/SkillsMarquee';
 import Projects from '../components/Projects';
 import Gallery from '../components/Gallery';
+import Artwork from '../components/Artwork';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -19,6 +20,7 @@ export default function Home() {
       <SkillsMarquee />
       <Projects />
       <Gallery />
+      <Artwork />
       <Contact />
       <Footer />
     </>

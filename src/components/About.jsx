@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function About() {
   return (
     <section className="section" id="about">
@@ -28,16 +30,22 @@ export default function About() {
                 <span className="stat-label">Photos<br />Captured</span>
               </div>
             </div>
+
+            <div className="about-cta reveal">
+              <Link to="/career" className="btn-pill btn-pill-dark">
+                Read the long version →
+              </Link>
+            </div>
           </div>
           <div className="about-image reveal">
             <img
-              src="/me.png"
+              src="/me.webp"
               alt="Saail Chavan"
               className="about-photo"
               onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex'; }}
             />
             <div className="image-placeholder" style={{ display: 'none' }}>
-              <span>ADD /public/me.png</span>
+              <span>ADD /public/me.webp</span>
             </div>
           </div>
         </div>
