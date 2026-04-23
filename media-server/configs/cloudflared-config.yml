@@ -1,0 +1,24 @@
+# Cloudflare Tunnel configuration for Jellyfin
+# Copy this file to: %USERPROFILE%\.cloudflared\config.yml
+# Then replace the placeholder values below.
+
+# Your tunnel ID (UUID printed when you ran: cloudflared tunnel create jellyfin)
+tunnel: YOUR_TUNNEL_ID
+
+# Path to the credentials file (auto-created during tunnel creation)
+credentials-file: C:\Users\YOUR_USERNAME\.cloudflared\YOUR_TUNNEL_ID.json
+
+# Route traffic from watch.cuboholic.in to local Jellyfin
+ingress:
+  - hostname: watch.cuboholic.in
+    service: http://localhost:8096
+    originRequest:
+      # Increase timeouts for large media file streaming
+      connectTimeout: 30s
+      noTLSVerify: false
+      # Keep connections alive for streaming
+      keepAliveTimeout: 90s
+      keepAliveConnections: 100
+
+  # Catch-all rule (required by cloudflared) — returns 404 for unmatched hostnames
+  - service: http_status:404

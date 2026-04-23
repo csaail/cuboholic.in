@@ -1,0 +1,668 @@
+/*
+ * ╔══════════════════════════════════════════════════╗
+ * ║           PARALLAX — Custom Jellyfin Theme       ║
+ * ╠══════════════════════════════════════════════════╣
+ * ║  Netflix / Hotstar inspired dark cinema UI       ║
+ * ║                                                  ║
+ * ║  HOW TO INSTALL:                                 ║
+ * ║  1. Open Jellyfin Admin Dashboard                ║
+ * ║  2. Go to: Dashboard → General → Custom CSS      ║
+ * ║  3. Paste this entire file into the CSS box       ║
+ * ║  4. Save                                         ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/* ========================================
+   ROOT VARIABLES — Color Palette
+   ======================================== */
+:root {
+    --parallax-bg: #0a0a0f;
+    --parallax-surface: #12121a;
+    --parallax-card: #1a1a28;
+    --parallax-accent: #e50914;
+    --parallax-accent-glow: rgba(229, 9, 20, 0.4);
+    --parallax-accent-secondary: #b81d24;
+    --parallax-text-primary: #f0f0f0;
+    --parallax-text-secondary: #a0a0b0;
+    --parallax-text-muted: #606070;
+    --parallax-gradient-start: #0a0a0f;
+    --parallax-gradient-end: #1a0a1e;
+    --parallax-border: rgba(255, 255, 255, 0.06);
+    --parallax-glass: rgba(18, 18, 26, 0.85);
+}
+
+/* ========================================
+   GLOBAL — Body & Backgrounds
+   ======================================== */
+html {
+    background: var(--parallax-bg) !important;
+    color: var(--parallax-text-primary) !important;
+    scroll-behavior: smooth;
+}
+
+.skinBody,
+.mainDrawer,
+.backgroundContainer,
+.dialog,
+html {
+    background: linear-gradient(
+        160deg,
+        var(--parallax-gradient-start) 0%,
+        var(--parallax-gradient-end) 100%
+    ) !important;
+    color: var(--parallax-text-primary) !important;
+}
+
+/* ========================================
+   LOGIN PAGE — Entry Animation
+   ======================================== */
+
+/* The login page splash */
+#loginPage {
+    animation: parallaxFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes parallaxFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(1.05) translateY(20px);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* Branding text on login */
+.loginDisclaimer {
+    font-size: 0.85em;
+    color: var(--parallax-text-muted);
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+/* Style the server name / title on login */
+.serverName,
+h1[class*="title"],
+.login .title {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, #e50914 50%, #ff6b6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: parallaxTitleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes parallaxTitleGlow {
+    0% {
+        filter: brightness(1) drop-shadow(0 0 0px transparent);
+    }
+    100% {
+        filter: brightness(1.1) drop-shadow(0 0 20px var(--parallax-accent-glow));
+    }
+}
+
+/* Login form container */
+.padded-left.padded-right.padded-bottom-page,
+form[class*="login"],
+#loginPage .padded-left {
+    max-width: 420px;
+    margin: 0 auto;
+    background: var(--parallax-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--parallax-border);
+    border-radius: 16px;
+    padding: 2.5rem !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    animation: parallaxSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+@keyframes parallaxSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   BUTTONS — Primary Action Styling
+   ======================================== */
+.raised.button-submit,
+.raised.button-accent,
+.button-submit,
+.emby-button.button-submit {
+    background: linear-gradient(135deg, var(--parallax-accent) 0%, var(--parallax-accent-secondary) 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    padding: 0.8em 2em !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 4px 15px var(--parallax-accent-glow) !important;
+}
+
+.raised.button-submit:hover,
+.raised.button-accent:hover,
+.button-submit:hover,
+.emby-button.button-submit:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 30px var(--parallax-accent-glow) !important;
+    filter: brightness(1.15) !important;
+}
+
+.raised.button-submit:active,
+.button-submit:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Secondary buttons */
+.raised:not(.button-submit),
+.emby-button:not(.button-submit) {
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+/* ========================================
+   INPUT FIELDS — Modern Glass Inputs
+   ======================================== */
+.emby-input,
+.emby-textarea,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--parallax-border) !important;
+    border-radius: 10px !important;
+    color: var(--parallax-text-primary) !important;
+    padding: 0.9em 1.2em !important;
+    transition: all 0.3s ease !important;
+    font-size: 1em !important;
+}
+
+.emby-input:focus,
+input:focus {
+    border-color: var(--parallax-accent) !important;
+    box-shadow: 0 0 0 3px var(--parallax-accent-glow) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    outline: none !important;
+}
+
+/* ========================================
+   TOP BAR / HEADER
+   ======================================== */
+.skinHeader,
+.mainDrawer-scrollContainer,
+.headerTop {
+    background: var(--parallax-glass) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid var(--parallax-border) !important;
+}
+
+/* Header title */
+.headerButton.headerHomeButton,
+.pageTitleWithDefaultPageTitle {
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* ========================================
+   NAVIGATION — Sidebar / Drawer
+   ======================================== */
+.mainDrawer {
+    background: var(--parallax-surface) !important;
+    border-right: 1px solid var(--parallax-border) !important;
+}
+
+.navMenuOption {
+    border-radius: 8px !important;
+    margin: 2px 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+.navMenuOption:hover {
+    background: rgba(229, 9, 20, 0.1) !important;
+}
+
+.navMenuOption.navMenuOption-selected {
+    background: rgba(229, 9, 20, 0.15) !important;
+    border-left: 3px solid var(--parallax-accent) !important;
+    color: var(--parallax-accent) !important;
+}
+
+/* ========================================
+   CARDS — Movie Posters & Tiles
+   Netflix-style hover zoom
+   ======================================== */
+.card {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    background: transparent !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card:hover {
+    transform: scale(1.08) !important;
+    z-index: 10 !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6),
+                0 0 20px var(--parallax-accent-glow) !important;
+}
+
+.cardBox {
+    margin: 4px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+/* Card image overlay gradient (Netflix style bottom fade) */
+.cardOverlayContainer {
+    background: linear-gradient(
+        0deg,
+        rgba(10, 10, 15, 0.95) 0%,
+        rgba(10, 10, 15, 0.4) 40%,
+        transparent 100%
+    ) !important;
+}
+
+/* Card text */
+.cardText,
+.cardTextCentered {
+    color: var(--parallax-text-primary) !important;
+    font-weight: 500;
+}
+
+.cardText-secondary {
+    color: var(--parallax-text-secondary) !important;
+}
+
+/* Card indicator (watched, unplayed count) */
+.indicator {
+    background: var(--parallax-accent) !important;
+    border-radius: 4px !important;
+    font-weight: 700;
+}
+
+/* ========================================
+   CARD ANIMATIONS — Staggered load-in
+   ======================================== */
+.card {
+    animation: parallaxCardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes parallaxCardIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Stagger effect for card rows */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.2s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.3s; }
+.card:nth-child(7) { animation-delay: 0.35s; }
+.card:nth-child(8) { animation-delay: 0.4s; }
+.card:nth-child(9) { animation-delay: 0.45s; }
+.card:nth-child(10) { animation-delay: 0.5s; }
+
+/* ========================================
+   ITEM DETAIL PAGE — Movie/Show Info
+   ======================================== */
+.detailPageWrapperContainer {
+    animation: parallaxFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Detail backdrop gradient */
+.detailImageContainer {
+    position: relative;
+}
+
+.detailImageContainer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(0deg, var(--parallax-bg) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* Play button on detail page — big and cinematic */
+.detailButton-primary,
+.button-play {
+    background: linear-gradient(135deg, var(--parallax-accent) 0%, #ff2d2d 100%) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 0.8em 2.5em !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    font-size: 1.05em !important;
+    box-shadow: 0 6px 25px var(--parallax-accent-glow) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.detailButton-primary:hover,
+.button-play:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 10px 40px var(--parallax-accent-glow) !important;
+}
+
+/* ========================================
+   SECTIONS — Row Headers (Netflix-style)
+   ======================================== */
+.sectionTitle,
+h2.sectionTitle {
+    font-weight: 700 !important;
+    font-size: 1.3em !important;
+    letter-spacing: 0.5px;
+    color: var(--parallax-text-primary) !important;
+    padding-bottom: 0.5em;
+}
+
+.sectionTitle:hover {
+    color: var(--parallax-text-secondary) !important;
+}
+
+/* Section title link arrow */
+.sectionTitle .sectionTitleTextButton .material-icons {
+    transition: transform 0.2s ease;
+}
+
+.sectionTitle:hover .sectionTitleTextButton .material-icons {
+    transform: translateX(4px);
+}
+
+/* ========================================
+   HORIZONTAL SCROLLING ROWS
+   ======================================== */
+.itemsContainer {
+    scroll-behavior: smooth;
+}
+
+/* Scroll fade edges */
+.sectionTitleContainer ~ .itemsContainer {
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        black 2%,
+        black 98%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        black 2%,
+        black 98%,
+        transparent 100%
+    );
+}
+
+/* ========================================
+   VIDEO PLAYER — Cinema Mode
+   ======================================== */
+.videoPlayerContainer {
+    background: #000 !important;
+}
+
+/* Player OSD bar */
+.osdControls,
+.videoOsdBottom {
+    background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.4) 60%,
+        transparent 100%
+    ) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Progress bar */
+.mdl-slider::-webkit-slider-thumb,
+.emby-slider-background-lower {
+    background: var(--parallax-accent) !important;
+}
+
+.sliderBubble {
+    background: var(--parallax-accent) !important;
+    border-radius: 6px !important;
+}
+
+/* ========================================
+   DIALOGS & MODALS
+   ======================================== */
+.dialog,
+.formDialogContent,
+.dialogContainer .dialog {
+    background: var(--parallax-surface) !important;
+    border: 1px solid var(--parallax-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dialogBackdrop {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* ========================================
+   SCROLLBAR — Minimal & Sleek
+   ======================================== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--parallax-accent);
+}
+
+/* ========================================
+   MISCELLANEOUS — Quality of Life
+   ======================================== */
+
+/* Smooth page transitions */
+.page-withTabs,
+.libraryPage,
+.itemDetailPage {
+    animation: parallaxFadeIn 0.5s ease forwards;
+}
+
+/* Toast / notification styling */
+.toast {
+    background: var(--parallax-glass) !important;
+    border: 1px solid var(--parallax-border) !important;
+    border-radius: 10px !important;
+    backdrop-filter: blur(20px) !important;
+    color: var(--parallax-text-primary) !important;
+}
+
+/* Empty library state */
+.noItemsMessage {
+    color: var(--parallax-text-muted) !important;
+}
+
+/* Tab buttons */
+.emby-tab-button {
+    color: var(--parallax-text-secondary) !important;
+    transition: color 0.2s ease;
+}
+
+.emby-tab-button-active {
+    color: var(--parallax-text-primary) !important;
+}
+
+.emby-tab-button-active::after,
+.emby-tab-button:hover::after {
+    background: var(--parallax-accent) !important;
+}
+
+/* Selection checkbox */
+.checkboxOutline {
+    border-color: var(--parallax-text-muted) !important;
+}
+
+.checkboxLabel:hover .checkboxOutline {
+    border-color: var(--parallax-accent) !important;
+}
+
+/* ========================================
+   MOBILE RESPONSIVE TWEAKS
+   ======================================== */
+@media (max-width: 768px) {
+    .card:hover {
+        transform: scale(1.03) !important;
+    }
+
+    .padded-left.padded-right.padded-bottom-page,
+    form[class*="login"],
+    #loginPage .padded-left {
+        margin: 0 1rem;
+        padding: 1.5rem !important;
+        border-radius: 12px;
+    }
+}
+
+/* ========================================
+   LOADING SPINNER — Branded
+   ======================================== */
+.mdl-spinner__layer {
+    border-color: var(--parallax-accent) !important;
+}
+
+/* ========================================
+   ADMIN DASHBOARD — Accent for admin pages
+   (Guest users won't see these)
+   ======================================== */
+.adminDrawerLogo {
+    opacity: 0.9;
+}
+
+.dashboard-section .cardBox {
+    background: var(--parallax-card) !important;
+    border: 1px solid var(--parallax-border) !important;
+    border-radius: 12px !important;
+}
+
+/* ========================================
+   REBRAND — Replace Jellyfin with Parallax
+   ======================================== */
+
+/* ========================================
+   REBRAND — Nuke all Jellyfin branding
+   ======================================== */
+
+/* Hide the entire home button (logo + "Jellyfin" text) */
+.headerHomeButton {
+    font-size: 0 !important;
+    color: transparent !important;
+    position: relative;
+    min-width: 140px !important;
+    padding-left: 16px !important;
+}
+
+/* Hide any images/SVGs inside the home button */
+.headerHomeButton img,
+.headerHomeButton svg,
+.headerHomeButton .headerIcon,
+.headerHomeButton span {
+    display: none !important;
+}
+
+/* Inject "PARALLAX" as replacement */
+.headerHomeButton::after {
+    content: 'PARALLAX';
+    font-size: 18px !important;
+    font-weight: 800;
+    letter-spacing: 5px;
+    background: linear-gradient(135deg, #ffffff 0%, #e50914 50%, #ff6b6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+}
+
+/* Invert the black logo so it looks white on the dark background */
+.splashLogo,
+.imgLoginLogo,
+.loginLogo,
+img[src*="banner"] {
+    filter: invert(1) brightness(2) !important;
+}
+
+/* Hide "Jellyfin" in the page title area */
+.pageTitleWithDefaultLogo {
+    font-size: 0 !important;
+    position: relative;
+    min-height: 30px;
+}
+
+.pageTitleWithDefaultLogo::after {
+    content: 'PARALLAX';
+    font-size: 18px !important;
+    font-weight: 800;
+    letter-spacing: 5px;
+    background: linear-gradient(135deg, #ffffff 0%, #e50914 50%, #ff6b6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Sidebar brand — hide Jellyfin, show Parallax */
+.adminDrawerLogo {
+    visibility: hidden !important;
+    position: relative;
+    min-height: 40px;
+}
+
+.adminDrawerLogo::after {
+    content: 'PARALLAX';
+    visibility: visible !important;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--parallax-accent) !important;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Change browser tab title via the splash screen */
+.splashLogo::after {
+    content: 'Parallax';
+}

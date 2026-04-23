@@ -1,0 +1,35 @@
+<!--
+  Jellyfin Network Configuration Reference
+
+  Location: C:\ProgramData\Jellyfin\Server\config\network.xml
+
+  NOTE: It's easier to configure these via the Jellyfin Dashboard UI.
+  This file is provided as a reference / backup of recommended settings.
+  Only copy this file if you want to override settings outside the UI.
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<NetworkConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- Keep default HTTP port -->
+  <InternalHttpPort>8096</InternalHttpPort>
+
+  <!-- HTTPS is handled by Cloudflare, so we don't need local HTTPS -->
+  <EnableHttps>false</EnableHttps>
+
+  <!-- Allow remote connections (needed for Cloudflare Tunnel) -->
+  <EnableRemoteAccess>true</EnableRemoteAccess>
+
+  <!-- Define your LAN subnets (adjust if your network differs) -->
+  <LocalNetworkSubnets>
+    <string>192.168.0.0/16</string>
+    <string>10.0.0.0/8</string>
+  </LocalNetworkSubnets>
+
+  <!-- Trust the Cloudflare Tunnel proxy (connects from localhost) -->
+  <KnownProxies>
+    <string>127.0.0.1</string>
+  </KnownProxies>
+
+  <!-- Bind to all interfaces -->
+  <LocalNetworkAddresses />
+</NetworkConfiguration>
