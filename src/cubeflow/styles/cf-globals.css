@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CubeFlow scoped reset + tokens — only applies under .cubeflow-app */
+.cubeflow-app {
+  --cf-bg0: #0A0B0F;
+  --cf-bg1: #0F1117;
+  --cf-bg2: #161922;
+  --cf-line: rgba(255, 255, 255, 0.08);
+  --cf-text-hi: #F4F5FA;
+  --cf-text-mid: #A8AEC1;
+  --cf-accent: #6E5BFF;
+  --cf-accent-2: #00E5C7;
+
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--cf-bg0);
+  color: var(--cf-text-hi);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.cubeflow-app *,
+.cubeflow-app *::before,
+.cubeflow-app *::after {
+  box-sizing: border-box;
+}
+
+.cubeflow-app h1,
+.cubeflow-app h2,
+.cubeflow-app h3,
+.cubeflow-app h4 {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--cf-text-hi);
+}
+
+.cubeflow-app button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.cubeflow-app a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cubeflow-app input,
+.cubeflow-app textarea,
+.cubeflow-app select {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Ambient backdrop */
+.cubeflow-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 70% 0%, rgba(110, 91, 255, 0.18), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 10% 100%, rgba(0, 229, 199, 0.10), transparent 60%),
+    var(--cf-bg0);
+}
+
+.cubeflow-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+}
+
+/* Glass surface helper */
+.cf-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+
+/* Notation chip */
+.cf-notation {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-feature-settings: 'ss01';
+}
+
+/* Scrollbar styling, scoped */
+.cubeflow-app ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.cubeflow-app ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cubeflow-app ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+}
+.cubeflow-app ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cubeflow-app *,
+  .cubeflow-app *::before,
+  .cubeflow-app *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
