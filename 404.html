@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>cuboholic — redirecting…</title>
+  <script>
+    // gh-pages SPA fallback: store the requested URL, then bounce to /
+    // index.html reads sessionStorage.redirect and replaceState's it back.
+    sessionStorage.redirect = location.href;
+    location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>
