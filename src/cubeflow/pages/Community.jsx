@@ -4,13 +4,14 @@ import GlassPanel from '../components/ui/GlassPanel.jsx';
 import Chip from '../components/ui/Chip.jsx';
 import { formatTime } from '../lib/format.js';
 
+// Preview data: every handle and time below is made up. Swap for live data once the backend ships.
 const MOCK_LEADERBOARD = [
-  { rank: 1, handle: '@feliks', country: '🇵🇱', single: 3470, ao5: 4180, solves: 12834 },
-  { rank: 2, handle: '@yusheng', country: '🇨🇳', single: 3540, ao5: 4290, solves: 9241 },
-  { rank: 3, handle: '@maxpark', country: '🇺🇸', single: 3690, ao5: 4480, solves: 8123 },
-  { rank: 4, handle: '@tymonkolasinski', country: '🇵🇱', single: 4010, ao5: 4920, solves: 7250 },
-  { rank: 5, handle: '@asianspeedcuber', country: '🇸🇬', single: 4200, ao5: 5180, solves: 6432 },
-  { rank: 6, handle: '@tornadocuber', country: '🇮🇳', single: 4880, ao5: 5810, solves: 5821 },
+  { rank: 1, handle: '@twistyfingers', country: '🇵🇱', single: 3470, ao5: 4180, solves: 12834 },
+  { rank: 2, handle: '@lastlayerlee', country: '🇨🇳', single: 3540, ao5: 4290, solves: 9241 },
+  { rank: 3, handle: '@crosscornercam', country: '🇺🇸', single: 3690, ao5: 4480, solves: 8123 },
+  { rank: 4, handle: '@ollskipolly', country: '🇵🇱', single: 4010, ao5: 4920, solves: 7250 },
+  { rank: 5, handle: '@m2_mira', country: '🇸🇬', single: 4200, ao5: 5180, solves: 6432 },
+  { rank: 6, handle: '@sune_sahil', country: '🇮🇳', single: 4880, ao5: 5810, solves: 5821 },
   { rank: 7, handle: '@cubeflow_demo', country: '🇮🇳', single: 5240, ao5: 6120, solves: 4012 },
 ];
 
@@ -51,11 +52,14 @@ export default function Community() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <Chip tone="mint">Community</Chip>
+        <div className="flex flex-wrap gap-2">
+          <Chip tone="mint">Community</Chip>
+          <Chip tone="warn">Preview · sample data</Chip>
+        </div>
         <h1 className="font-display font-bold text-4xl sm:text-5xl text-cf-hi mt-3">Cubers worldwide.</h1>
         <p className="mt-3 text-cf-mid max-w-2xl">
-          See what other cubers are solving. Compete on the daily leaderboard.
-          Share your PBs.
+          Coming soon: share your PBs, see what other cubers are solving, and compete on the
+          daily leaderboard. Everything on this page is placeholder data showing how it'll look.
         </p>
       </div>
 
@@ -64,7 +68,7 @@ export default function Community() {
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-2">
             <Users className="w-5 h-5 text-cf-accent" />
-            <h2 className="font-display font-semibold text-xl text-cf-hi">Recent shares</h2>
+            <h2 className="font-display font-semibold text-xl text-cf-hi">Recent shares <span className="text-xs font-normal text-cf-lo">(sample)</span></h2>
           </div>
           {MOCK_FEED.map((post, i) => (
             <motion.div
@@ -111,7 +115,7 @@ export default function Community() {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Trophy className="w-5 h-5 text-cf-warn" />
-            <h2 className="font-display font-semibold text-xl text-cf-hi">All-time leaderboard</h2>
+            <h2 className="font-display font-semibold text-xl text-cf-hi">All-time leaderboard <span className="text-xs font-normal text-cf-lo">(sample)</span></h2>
           </div>
           <GlassPanel padded={false}>
             <div className="overflow-hidden rounded-cf-lg">
@@ -149,7 +153,7 @@ export default function Community() {
               <span className="font-display font-semibold text-cf-hi text-sm">Daily challenge</span>
             </div>
             <div className="text-xs text-cf-mid mb-3">
-              Solve today's scramble — your time joins the daily leaderboard.
+              Try today's scramble in the Timer. Daily leaderboards arrive with the community release.
             </div>
             <div className="cf-notation text-xs text-cf-hi bg-cf-bg2 rounded px-2.5 py-2 border border-cf-line break-words">
               R U R' U' F' U2 F R U' R' D' L F2 D L' U2

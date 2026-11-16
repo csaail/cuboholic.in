@@ -30,17 +30,17 @@
   box-sizing: border-box;
 }
 
-.cubeflow-app h1,
-.cubeflow-app h2,
-.cubeflow-app h3,
-.cubeflow-app h4 {
+/* Element resets are wrapped in :where() so they have zero specificity —
+   otherwise `:where(.cubeflow-app) :where(button) { background: none }` beats Tailwind
+   utilities like .bg-cf-accent / .cf-glass and every button loses its fill. */
+:where(.cubeflow-app) :where(h1, h2, h3, h4) {
   font-family: 'Space Grotesk', 'Inter', sans-serif;
   letter-spacing: -0.02em;
   line-height: 1.05;
   color: var(--cf-text-hi);
 }
 
-.cubeflow-app button {
+:where(.cubeflow-app) :where(button) {
   font-family: inherit;
   cursor: pointer;
   border: none;
@@ -48,14 +48,12 @@
   color: inherit;
 }
 
-.cubeflow-app a {
+:where(.cubeflow-app) :where(a) {
   color: inherit;
   text-decoration: none;
 }
 
-.cubeflow-app input,
-.cubeflow-app textarea,
-.cubeflow-app select {
+:where(.cubeflow-app) :where(input, textarea, select) {
   font-family: inherit;
   color: inherit;
 }

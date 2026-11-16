@@ -1,8 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import Home from './pages/Home';
 import Vault from './pages/Vault';
-import Shop from './pages/Shop';
+import Prints from './pages/Prints';
+import Creative from './pages/Creative';
 import Career from './pages/Career';
 
 const CubeFlowShell = lazy(() => import('./cubeflow/CubeFlowShell.jsx'));
@@ -36,12 +37,24 @@ function CubeFlowFallback() {
   );
 }
 
+// Apps built separately into public/<name>/ (see apps/). Normally the server hands
+// out their own index.html; if this React app ever ends up on one of those paths
+// (e.g. a dev server that hasn't picked up vite.config.js), load the real page.
+function StaticApp({ name }) {
+  useEffect(() => { window.location.replace(`/${name}/index.html`); }, [name]);
+  return null;
+}
+
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/vault" element={<Vault />} />
-      <Route path="/shop" element={<Shop />} />
+      <Route path="/prints" element={<Prints />} />
+      <Route path="/creative" element={<Creative />} />
+      <Route path="/art" element={<Navigate to="/creative" replace />} />
+      <Route path="/roastmyrepo/*" element={<StaticApp name="roastmyrepo" />} />
+      <Route path="/shop" element={<Navigate to="/prints" replace />} />
       <Route path="/career" element={<Career />} />
       <Route
         path="/cubeflow"

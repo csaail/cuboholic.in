@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import artworks from '../data/artworks';
+import Scribble from './motion/Scribble';
+import SectionNumber from './motion/SectionNumber';
 
-export default function Artwork() {
+export default function Artwork({ standalone = false }) {
   const spreads = useMemo(() => {
     const out = [];
     for (let i = 0; i < artworks.length; i += 2) {
@@ -50,10 +52,11 @@ export default function Artwork() {
       <Doodle className="doodle doodle-spark-1" variant="spark" />
       <Doodle className="doodle doodle-arrow-2" variant="arrow-curl" />
 
+      {!standalone && <SectionNumber n="06" />}
       <div className="container">
-        <div className="section-label reveal">04 — Artwork</div>
+        <div className="section-label reveal">{standalone ? 'Sketchbook' : '06 — Artwork'}</div>
         <h2 className="editorial-heading reveal">
-          Scribbles &amp; <em>doodles.</em>
+          Scribbles &amp; <Scribble variant="loop">doodles.</Scribble>
         </h2>
         <p className="body-text reveal">
           A peek inside my sketchbook — characters, moments, and whatever's stuck in my head that day.

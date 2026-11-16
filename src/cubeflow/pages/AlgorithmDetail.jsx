@@ -10,8 +10,13 @@ import GlassPanel from '../components/ui/GlassPanel.jsx';
 import Button from '../components/ui/Button.jsx';
 import Chip from '../components/ui/Chip.jsx';
 
+// Keyed by algId so jumping to a related algorithm resets the rep counter.
 export default function AlgorithmDetail() {
   const { algId } = useParams();
+  return <AlgorithmDetailContent key={algId} algId={algId} />;
+}
+
+function AlgorithmDetailContent({ algId }) {
   const algo = getAlgorithm(algId);
   const mastered = useUserStore((s) => s.algosMastered);
   const masterAlgo = useUserStore((s) => s.masterAlgo);

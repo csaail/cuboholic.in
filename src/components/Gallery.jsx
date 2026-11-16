@@ -1,31 +1,12 @@
 import { useState, useEffect } from 'react';
+import photos from '../data/gallery.json'; // generated at build time by scripts/fetch-gallery.js
+import Scribble from './motion/Scribble';
+import SectionNumber from './motion/SectionNumber';
 
-const PEXELS_API_KEY = '1XtTdvJhUn5pJoiI3lEbrqlg0PQwgYTD9mVbNXpJEMJjArlrtYopoQ8Z';
-const COLLECTION_ID = '0xquq7j';
 const PEXELS_PROFILE = 'https://www.pexels.com/@saail-chavan-3631290/gallery/';
 
-export default function Gallery() {
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Gallery({ standalone = false }) {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-
-  useEffect(() => {
-    async function fetchPhotos() {
-      try {
-        const res = await fetch(
-          `https://api.pexels.com/v1/collections/${COLLECTION_ID}?type=photos&per_page=16`,
-          { headers: { Authorization: PEXELS_API_KEY } }
-        );
-        const data = await res.json();
-        setPhotos(data.media || []);
-      } catch (err) {
-        console.error('Failed to fetch photos:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPhotos();
-  }, []);
 
   useEffect(() => {
     if (!selectedPhoto) return;
@@ -44,22 +25,18 @@ export default function Gallery() {
 
   return (
     <section className="section gallery-section" id="gallery">
+      {!standalone && <SectionNumber n="05" />}
       <div className="container">
-        <div className="section-label reveal">03 — Gallery</div>
+        <div className="section-label reveal">{standalone ? 'Photography' : '05 — Photography'}</div>
         <h2 className="editorial-heading reveal">
-          Photographs &amp;<br /><em>captured moments.</em>
+          Photographs &amp;<br /><Scribble variant="swoosh">captured moments.</Scribble>
         </h2>
         <p className="body-text reveal">
           A rolling reel of favorites. Full set lives on Pexels.
         </p>
       </div>
 
-      {loading ? (
-        <div className="photo-reel photo-reel-loading">
-          <div className="photo-reel-skeleton" />
-          <div className="photo-reel-skeleton" />
-        </div>
-      ) : (
+      {photos.length > 0 && (
         <div className="photo-reel">
           <PhotoRow photos={row1} onOpen={setSelectedPhoto} />
           <PhotoRow photos={row2} onOpen={setSelectedPhoto} reverse />
@@ -96,7 +73,7 @@ export default function Gallery() {
           />
           {selectedPhoto.alt && (
             <p className="lightbox-caption">
-              {selectedPhoto.alt.replace(/^Free stock photo of /i, '')}
+              {selectedPhoto.alt}
             </p>
           )}
         </div>

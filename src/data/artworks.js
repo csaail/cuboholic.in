@@ -1,5 +1,5 @@
-// Artwork showcase. Drop images in /public/artwork/ (any ratio is fine — portrait works best).
-// After adding, run `node scripts/optimize-images.js` to generate .webp versions.
+// Artwork showcase. Drop originals in assets-src/artwork/ (any ratio is fine — portrait works best).
+// After adding, run `npm run images` to generate the .webp versions in public/artwork/.
 // Order matters — pairs are shown 2 per spread (left page, right page).
 
 const artworks = [

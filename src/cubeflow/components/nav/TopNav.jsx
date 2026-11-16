@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Box, Flame, Sparkles } from 'lucide-react';
+import { ArrowLeft, Box, Flame, Sparkles } from 'lucide-react';
 import { useUserStore, deriveLevel, xpForLevel } from '../../store/userStore.js';
 
 const LINKS = [
@@ -26,6 +26,17 @@ export default function TopNav() {
   return (
     <header className="sticky top-0 z-50 cf-glass border-b border-cf-line">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+        <Link
+          to="/"
+          className="flex items-center gap-1.5 text-sm text-cf-mid hover:text-cf-hi transition-colors shrink-0"
+          aria-label="Back to portfolio"
+          title="Back to portfolio"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="hidden sm:inline font-display font-semibold">Portfolio</span>
+        </Link>
+        <span className="w-px h-6 bg-cf-line" aria-hidden="true" />
         <Link to="/cubeflow" className="flex items-center gap-2.5 group">
           <motion.div
             whileHover={{ rotate: 90 }}
@@ -39,6 +50,7 @@ export default function TopNav() {
             <span className="text-[10px] text-cf-lo tracking-wide">free • interactive • visual</span>
           </div>
         </Link>
+        </div>
 
         <nav className="hidden md:flex items-center gap-1">
           {LINKS.map((l) => (

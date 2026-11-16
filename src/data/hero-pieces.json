@@ -1,0 +1,168 @@
+{
+ "width": 1717,
+ "height": 916,
+ "pieces": [
+  {
+   "key": "letter-0",
+   "kind": "letter",
+   "char": "S",
+   "x": 334,
+   "y": 82,
+   "w": 229,
+   "h": 505
+  },
+  {
+   "key": "letter-1",
+   "kind": "letter",
+   "char": "A",
+   "x": 578,
+   "y": 314,
+   "w": 216,
+   "h": 238
+  },
+  {
+   "key": "letter-2",
+   "kind": "letter",
+   "char": "A",
+   "x": 800,
+   "y": 125,
+   "w": 229,
+   "h": 427
+  },
+  {
+   "key": "letter-3",
+   "kind": "letter",
+   "char": "I",
+   "x": 1049,
+   "y": 314,
+   "w": 70,
+   "h": 238
+  },
+  {
+   "key": "letter-4",
+   "kind": "letter",
+   "char": "L",
+   "x": 1134,
+   "y": 119,
+   "w": 261,
+   "h": 434
+  },
+  {
+   "key": "letter-6",
+   "kind": "letter",
+   "char": "H",
+   "x": 690,
+   "y": 578,
+   "w": 137,
+   "h": 209
+  },
+  {
+   "key": "letter-7",
+   "kind": "letter",
+   "char": "A",
+   "x": 836,
+   "y": 578,
+   "w": 149,
+   "h": 210
+  },
+  {
+   "key": "letter-8",
+   "kind": "letter",
+   "char": "V",
+   "x": 960,
+   "y": 578,
+   "w": 147,
+   "h": 207
+  },
+  {
+   "key": "letter-9",
+   "kind": "letter",
+   "char": "A",
+   "x": 1081,
+   "y": 578,
+   "w": 143,
+   "h": 207
+  },
+  {
+   "key": "letter-10",
+   "kind": "letter",
+   "char": "N",
+   "x": 1225,
+   "y": 578,
+   "w": 128,
+   "h": 208
+  },
+  {
+   "key": "notes",
+   "kind": "free",
+   "char": null,
+   "x": 1324,
+   "y": 200,
+   "w": 77,
+   "h": 62
+  },
+  {
+   "key": "drone",
+   "kind": "free",
+   "char": null,
+   "x": 1435,
+   "y": 265,
+   "w": 279,
+   "h": 116
+  },
+  {
+   "key": "robot",
+   "kind": "free",
+   "char": null,
+   "x": 20,
+   "y": 345,
+   "w": 375,
+   "h": 448
+  },
+  {
+   "key": "reader",
+   "kind": "free",
+   "char": null,
+   "x": 380,
+   "y": 536,
+   "w": 310,
+   "h": 257
+  },
+  {
+   "key": "boy",
+   "kind": "free",
+   "char": null,
+   "x": 1345,
+   "y": 530,
+   "w": 196,
+   "h": 263
+  },
+  {
+   "key": "dog",
+   "kind": "free",
+   "char": null,
+   "x": 1535,
+   "y": 614,
+   "w": 177,
+   "h": 179
+  },
+  {
+   "key": "heart",
+   "kind": "free",
+   "char": null,
+   "x": 1610,
+   "y": 577,
+   "w": 26,
+   "h": 29
+  },
+  {
+   "key": "ground",
+   "kind": "ground",
+   "char": null,
+   "x": 0,
+   "y": 763,
+   "w": 1688,
+   "h": 42
+  }
+ ]
+}

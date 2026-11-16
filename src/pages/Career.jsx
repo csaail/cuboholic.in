@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { experience, education, certifications, skills, resumePath } from '../data/career';
+import PointerFX from '../components/motion/PointerFX';
+import { contact, experience, education, certifications, skills, resumePath } from '../data/career';
 
 export default function Career() {
   useEffect(() => {
-    document.title = 'Career — Saail Chavan';
+    document.title = 'Résumé — Saail Chavan';
   }, []);
 
   return (
     <div className="career-page">
+      <PointerFX />
       <header className="career-nav">
-        <Link to="/" className="career-nav-logo">cuboholic</Link>
+        <Link to="/" className="career-nav-logo">Saail Chavan</Link>
         <Link to="/" className="career-back">← Back to portfolio</Link>
       </header>
 
@@ -24,10 +26,12 @@ export default function Career() {
             Experience, certifications, and the stuff that doesn't fit on the home page.
           </p>
           <div className="career-cta-row">
-            <a href={resumePath} download className="btn-pill btn-pill-dark">
-              ↓ Download Resume
-            </a>
-            <a href="mailto:sophosai007@gmail.com" className="btn-pill btn-pill-light">
+            {resumePath && (
+              <a href={resumePath} download className="btn-pill btn-pill-dark">
+                ↓ Download Resume
+              </a>
+            )}
+            <a href={`mailto:${contact.email}`} className={`btn-pill ${resumePath ? 'btn-pill-light' : 'btn-pill-dark'}`}>
               Get in touch
             </a>
           </div>
@@ -47,7 +51,7 @@ export default function Career() {
                     <span className="timeline-dates">{job.dates}</span>
                   </div>
                   <p className="timeline-company">
-                    <strong>{job.company}</strong> · {job.location}
+                    <strong>{job.company}</strong>{job.location ? ` · ${job.location}` : ''}
                   </p>
                   <ul className="timeline-bullets">
                     {job.bullets.map((b, j) => (
@@ -96,7 +100,7 @@ export default function Career() {
                 <div className="cert-badge" aria-hidden="true">✓</div>
                 <div className="cert-body">
                   <h4>{c.name}</h4>
-                  <p>{c.issuer} · {c.date}</p>
+                  <p>{c.issuer}{c.date ? ` · ${c.date}` : ''}</p>
                 </div>
                 {c.link && <span className="cert-arrow">↗</span>}
               </a>
@@ -125,8 +129,8 @@ export default function Career() {
 
       <footer className="footer">
         <div className="container footer-inner">
-          <span>&copy; 2026 cuboholic</span>
-          <Link to="/" className="shop-footer-link">Back to portfolio &rarr;</Link>
+          <span>&copy; 2026 Saail Chavan</span>
+          <Link to="/" className="footer-back-link">Back to portfolio &rarr;</Link>
         </div>
       </footer>
     </div>

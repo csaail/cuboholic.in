@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "gallery": "node --env-file-if-exists=.env.local scripts/fetch-gallery.js",
+    "images": "node scripts/optimize-images.js",
+    "build:roast": "cd apps/roastmyrepo && npx vite build --base=/roastmyrepo/ --outDir ../../public/roastmyrepo --emptyOutDir",
+    "prebuild": "npm run gallery",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",

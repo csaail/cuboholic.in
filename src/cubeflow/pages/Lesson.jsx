@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Trophy } from 'lucide-react';
 import { getLesson, LESSONS } from '../data/lessons.js';
@@ -10,8 +10,15 @@ import GlassPanel from '../components/ui/GlassPanel.jsx';
 import Button from '../components/ui/Button.jsx';
 import Chip from '../components/ui/Chip.jsx';
 
+// Keyed by lessonId so moving to the next lesson remounts with fresh state.
+// (React Router reuses the component when only the URL param changes, which
+// left `done` stuck at true and the "Next lesson" button appearing to do nothing.)
 export default function Lesson() {
   const { lessonId } = useParams();
+  return <LessonContent key={lessonId} lessonId={lessonId} />;
+}
+
+function LessonContent({ lessonId }) {
   const nav = useNavigate();
   const lesson = getLesson(lessonId);
   const completed = useUserStore((s) => s.lessonsCompleted);
@@ -54,11 +61,11 @@ export default function Lesson() {
         <h1 className="font-display font-bold text-4xl text-cf-hi">Lesson complete.</h1>
         <p className="mt-3 text-cf-mid">+{lesson.rewardXp} XP added to your level.</p>
         <div className="mt-8 flex justify-center gap-3">
-          <Link to="/cubeflow/learn"><Button variant="secondary">Back to roadmap</Button></Link>
+          <Button variant="secondary" onClick={() => nav('/cubeflow/learn')}>Back to roadmap</Button>
           {nextLesson && (
-            <Link to={`/cubeflow/learn/${nextLesson.id}`}>
-              <Button iconRight={ArrowRight}>Next: {nextLesson.title}</Button>
-            </Link>
+            <Button iconRight={ArrowRight} onClick={() => nav(`/cubeflow/learn/${nextLesson.id}`)}>
+              Next: {nextLesson.title}
+            </Button>
           )}
         </div>
       </div>
